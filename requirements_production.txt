@@ -6,6 +6,9 @@ django-simple-captcha==0.6.0
 # Production WSGI server
 gunicorn>=21.0.0
 
+# Database drivers
+pymysql>=1.0.0
+
 # Deep Learning and Machine Learning
 torch>=2.0.0
 torchvision>=0.15.0

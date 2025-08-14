@@ -5,8 +5,8 @@ services:
     plan: free
     buildCommand: |
       pip install -r requirements_production.txt
-      python manage.py collectstatic --noinput
-      python manage.py migrate
+      python manage.py collectstatic --noinput --settings=dl_ids.settings_production
+      python manage.py migrate --settings=dl_ids.settings_production
     startCommand: gunicorn dl_ids.wsgi:application
     envVars:
       - key: PYTHON_VERSION
