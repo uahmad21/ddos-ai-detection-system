@@ -4,7 +4,7 @@ services:
     env: python
     plan: free
     buildCommand: |
-      pip install -r requirements_production.txt
+      pip install -r requirements_minimal.txt
       python manage.py collectstatic --noinput --settings=dl_ids.settings_production
       python manage.py migrate --settings=dl_ids.settings_production
     startCommand: gunicorn dl_ids.wsgi:application

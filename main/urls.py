@@ -1,7 +1,13 @@
 from django.urls import path
 from . import user
 
-from main import views
+# Import production views that handle missing dependencies gracefully
+try:
+    from . import views_production as views
+    print("Using production views")
+except ImportError:
+    from . import views
+    print("Using original views")
 
 urlpatterns = [
     # 基础服务
