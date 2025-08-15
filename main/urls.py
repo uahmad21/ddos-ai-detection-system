@@ -14,6 +14,7 @@ urlpatterns = [
     path('', views.login, name="myadmin_login"),
     path('login', views.login, name="myadmin_login2"),
     path('dologin', views.do_login, name="myadmin_do_login"),
+    path('simple-login', views.simple_login, name="simple_login"),  # Demo login without captcha
     path('logout', views.logout_view, name="myadmin_logout"),
     path('register', views.register, name="myadmin_register"),
     path('doregister', views.do_register, name="myadmin_do_register"),

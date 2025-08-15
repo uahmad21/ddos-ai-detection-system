@@ -47,13 +47,16 @@ FEATURES = {
     'paginator': PAGINATOR_AVAILABLE
 }
 
+# Demo credentials
+DEMO_CREDENTIALS = {
+    'admin': 'admin123',
+    'demo': 'demo123',
+    'user': 'user123',
+    'test': 'test123'
+}
+
 def login(request):
-    """Basic login view"""
-    if not MODELS_AVAILABLE:
-        return render(request, 'error.html', {
-            'error': 'System not fully configured - Database models unavailable'
-        })
-    
+    """Basic login view with demo mode"""
     captcha_form = None
     if CAPTCHA_AVAILABLE:
         try:
@@ -63,16 +66,44 @@ def login(request):
     
     context = {
         "captcha_form": captcha_form,
-        "features": FEATURES
+        "features": FEATURES,
+        "demo_credentials": DEMO_CREDENTIALS,
+        "demo_mode": True
+    }
+    return render(request, 'login.html', context)
+
+def simple_login(request):
+    """Simple login without captcha for demo purposes"""
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('pass', '')
+        
+        # Demo login - accept any username/password
+        if username and password:
+            # Create a demo user session
+            request.session['is_login'] = True
+            request.session['login_user'] = {
+                'username': username,
+                'nickname': f'Demo User ({username})',
+                'status': 1
+            }
+            messages.success(request, f'Welcome {username}! Demo mode activated.')
+            return redirect('/index')
+        else:
+            messages.error(request, 'Username and password are required')
+    
+    context = {
+        'demo_mode': True,
+        'demo_credentials': DEMO_CREDENTIALS,
+        'features': FEATURES
     }
     return render(request, 'login.html', context)
 
 def do_login(request):
-    """Handle login form submission"""
+    """Handle login form submission - simplified for demo"""
     if not MODELS_AVAILABLE:
-        return render(request, 'error.html', {
-            'error': 'System not fully configured - Database models unavailable'
-        })
+        # Fall back to demo mode
+        return simple_login(request)
     
     captcha_form = None
     if CAPTCHA_AVAILABLE:
@@ -93,15 +124,27 @@ def do_login(request):
             messages.error(request, 'Username and password are required')
             return render(request, 'login.html', context)
         
+        # Check demo credentials first
+        if username in DEMO_CREDENTIALS and password == DEMO_CREDENTIALS[username]:
+            request.session['is_login'] = True
+            request.session['login_user'] = {
+                'username': username,
+                'nickname': f'Demo User ({username})',
+                'status': 1
+            }
+            messages.success(request, f'Welcome {username}! Demo mode activated.')
+            return redirect('/index')
+        
         # Try to get user from database
         try:
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             context = {
                 "captcha_form": captcha_form,
-                "info": 'User not found'
+                "info": f'User not found. Try demo credentials: {list(DEMO_CREDENTIALS.keys())}',
+                "demo_credentials": DEMO_CREDENTIALS
             }
-            messages.error(request, 'User not found')
+            messages.error(request, f'User not found. Try demo credentials: {list(DEMO_CREDENTIALS.keys())}')
             return render(request, 'login.html', context)
         
         # Check user status and password
@@ -150,17 +193,13 @@ def do_login(request):
             
     except Exception as e:
         print(f"Login error: {e}")
-        context = {
-            "captcha_form": captcha_form,
-            "info": 'System error occurred'
-        }
-        messages.error(request, 'System error occurred')
-    
-    return render(request, 'login.html', context)
+        # Fall back to demo mode
+        return simple_login(request)
 
 def logout_view(request):
     """Handle user logout"""
     request.session.flush()
+    messages.success(request, 'Successfully logged out')
     return redirect('/login')
 
 def register(request):
@@ -179,7 +218,8 @@ def register(request):
     
     context = {
         "captcha_form": captcha_form,
-        "features": FEATURES
+        "features": FEATURES,
+        "demo_credentials": DEMO_CREDENTIALS
     }
     return render(request, 'register.html', context)
 
@@ -196,7 +236,11 @@ def do_register(request):
 
 def forgot_pd(request):
     """Password recovery view"""
-    return render(request, 'forgot_pd.html', {'features': FEATURES})
+    context = {
+        'features': FEATURES,
+        'demo_credentials': DEMO_CREDENTIALS
+    }
+    return render(request, 'forgot_pd.html', context)
 
 def index(request, *args, **kwargs):
     """Main dashboard view"""
@@ -206,7 +250,8 @@ def index(request, *args, **kwargs):
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
-        'message': 'Welcome to DDoS AI Detection System - Demo Mode'
+        'message': 'Welcome to DDoS AI Detection System - Demo Mode',
+        'demo_mode': True
     }
     return render(request, 'index.html', context)
 
@@ -217,7 +262,8 @@ def screen(request):
     
     context = {
         'user': request.session.get('login_user'),
-        'features': FEATURES
+        'features': FEATURES,
+        'demo_mode': True
     }
     return render(request, 'screen.html', context)
 
@@ -229,7 +275,8 @@ def dataset_result(request):
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
-        'message': 'Dataset analysis not available in demo mode'
+        'message': 'Dataset analysis not available in demo mode',
+        'demo_mode': True
     }
     return render(request, 'dataset_result.html', context)
 
@@ -241,7 +288,8 @@ def model_tuning(request):
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
-        'message': 'Model tuning not available in demo mode'
+        'message': 'Model tuning not available in demo mode',
+        'demo_mode': True
     }
     return render(request, 'model_tuning.html', context)
 
@@ -281,7 +329,8 @@ def ip_rule_list(request):
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
-        'message': 'IP rules management not available in demo mode'
+        'message': 'IP rules management not available in demo mode',
+        'demo_mode': True
     }
     return render(request, 'ip_rules.html', context)
 
@@ -313,7 +362,8 @@ def traffic_log_list(request):
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
-        'message': 'Traffic logs not available in demo mode'
+        'message': 'Traffic logs not available in demo mode',
+        'demo_mode': True
     }
     return render(request, 'traffic_log.html', context)
 

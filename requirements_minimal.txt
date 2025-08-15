@@ -25,3 +25,9 @@ setuptools>=65.0.0
 wheel>=0.37.0
 packaging>=21.0
 importlib-metadata>=4.0.0
+
+# Database (optional for demo)
+# sqlparse>=0.4.0
+
+# Note: This minimal setup provides basic functionality
+# Advanced features require additional packages
