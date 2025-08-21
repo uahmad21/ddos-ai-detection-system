@@ -1,6 +1,6 @@
 # Minimal requirements for DDoS AI Detection System - Production
-# Core Django Framework
-Django==5.1.4
+# Core Django Framework (using 4.2 for better compatibility)
+Django==4.2.7
 
 # Production WSGI server
 gunicorn>=21.0.0
@@ -26,8 +26,5 @@ wheel>=0.37.0
 packaging>=21.0
 importlib-metadata>=4.0.0
 
-# Basic data processing (for demo functionality)
-scikit-learn>=1.0.0
-
-# Note: This setup provides basic functionality and demo features
-# Advanced deep learning features require additional packages
+# Note: This minimal setup provides basic functionality
+# Advanced features require additional packages

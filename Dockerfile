@@ -1,5 +1,5 @@
-# Use Python 3.9 slim image for better compatibility
-FROM python:3.9-slim
+# Use Python 3.10 slim image for Django 5.1.4 compatibility
+FROM python:3.10-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
