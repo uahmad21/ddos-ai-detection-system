@@ -121,6 +121,22 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 
+# CSRF Trusted Origins for Fly.io - THIS IS THE MISSING PIECE!
+CSRF_TRUSTED_ORIGINS = [
+    'https://df-defence.fly.dev',
+    'https://df-defence.fly.dev/',
+    'https://df-defence.fly.dev/dologin',
+    'https://df-defence.fly.dev/login',
+    'https://df-defence.fly.dev/simple-login',
+]
+
+# CORS and Security Headers
+CORS_ALLOW_ALL_ORIGINS = True  # For development/demo purposes
+CORS_ALLOW_CREDENTIALS = True
+
+# Additional security headers
+SECURE_REFERRER_POLICY = 'strict-origin-when-cross-origin'
+
 # Logging configuration
 LOGGING = {
     'version': 1,
