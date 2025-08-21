@@ -523,6 +523,97 @@ def traffic_log_list(request):
             'threat_level': 'Low',
             'packet_count': 500,
             'bytes_transferred': 25000
+        },
+        {
+            'id': 4,
+            'created_time': '2025-08-21 15:27:30',
+            'source_ip': '172.16.0.45',
+            'dest_ip': '10.0.0.53',
+            'source_port': 8080,
+            'dest_port': 443,
+            'protocol': 'TCP',
+            'attack_type': 'Botnet',
+            'threat_level': 'High',
+            'packet_count': 8000,
+            'bytes_transferred': 1500000
+        },
+        {
+            'id': 5,
+            'created_time': '2025-08-21 15:26:18',
+            'source_ip': '45.67.89.123',
+            'dest_ip': '10.0.0.54',
+            'source_port': 12345,
+            'dest_port': 21,
+            'protocol': 'TCP',
+            'attack_type': 'FTP Attack',
+            'threat_level': 'Medium',
+            'packet_count': 1200,
+            'bytes_transferred': 85000
+        },
+        {
+            'id': 6,
+            'created_time': '2025-08-21 15:25:45',
+            'source_ip': '10.0.0.100',
+            'dest_ip': '10.0.0.55',
+            'source_port': 54321,
+            'dest_port': 22,
+            'protocol': 'TCP',
+            'attack_type': 'SSH Brute Force',
+            'threat_level': 'High',
+            'packet_count': 3000,
+            'bytes_transferred': 180000
+        },
+        {
+            'id': 7,
+            'created_time': '2025-08-21 15:24:22',
+            'source_ip': '198.51.100.78',
+            'dest_ip': '10.0.0.56',
+            'source_port': 9999,
+            'dest_port': 80,
+            'protocol': 'TCP',
+            'attack_type': 'HTTP Flood',
+            'threat_level': 'Medium',
+            'packet_count': 5000,
+            'bytes_transferred': 750000
+        },
+        {
+            'id': 8,
+            'created_time': '2025-08-21 15:23:15',
+            'source_ip': '203.0.113.45',
+            'dest_ip': '10.0.0.57',
+            'source_port': 1234,
+            'dest_port': 53,
+            'protocol': 'UDP',
+            'attack_type': 'DNS Amplification',
+            'threat_level': 'High',
+            'packet_count': 12000,
+            'bytes_transferred': 2500000
+        },
+        {
+            'id': 9,
+            'created_time': '2025-08-21 15:22:08',
+            'source_ip': '192.0.2.67',
+            'dest_ip': '10.0.0.58',
+            'source_port': 5432,
+            'dest_port': 3306,
+            'protocol': 'TCP',
+            'attack_type': 'Database Scan',
+            'threat_level': 'Low',
+            'packet_count': 800,
+            'bytes_transferred': 45000
+        },
+        {
+            'id': 10,
+            'created_time': '2025-08-21 15:21:45',
+            'source_ip': '172.20.0.89',
+            'dest_ip': '10.0.0.59',
+            'source_port': 6543,
+            'dest_port': 25,
+            'protocol': 'TCP',
+            'attack_type': 'SMTP Attack',
+            'threat_level': 'Medium',
+            'packet_count': 1500,
+            'bytes_transferred': 95000
         }
     ]
     

@@ -105,6 +105,14 @@ function setupDashboard() {
     
     // Add alert trend visualization
     addAlertTrendChart();
+    
+    // Make stat cards clickable
+    const statCards = document.querySelectorAll('.clickable-stat');
+    statCards.forEach(card => {
+        card.addEventListener('click', function() {
+            showStatDetails(this.dataset.type);
+        });
+    });
 }
 
 function addPerformanceCharts() {
@@ -175,9 +183,50 @@ function performSearch() {
     const sourceIP = document.querySelector('#source-ip').value;
     const threatLevel = document.querySelector('#threat-level').value;
     
-    // Simulate search results
-    const results = simulateSearch(sourceIP, threatLevel);
-    displaySearchResults(results);
+    // Get all traffic rows
+    const allRows = document.querySelectorAll('#traffic-table tbody tr');
+    const results = [];
+    
+    allRows.forEach(row => {
+        const rowIP = row.cells[2].textContent;
+        const rowThreat = row.cells[8].textContent;
+        
+        let showRow = true;
+        
+        // Filter by IP if specified
+        if (sourceIP && !rowIP.includes(sourceIP)) {
+            showRow = false;
+        }
+        
+        // Filter by threat level if specified
+        if (threatLevel && !rowThreat.includes(threatLevel)) {
+            showRow = false;
+        }
+        
+        // Show/hide row based on filters
+        row.style.display = showRow ? '' : 'none';
+        
+        if (showRow) {
+            results.push({
+                ip: rowIP,
+                threat: rowThreat,
+                time: row.cells[1].textContent,
+                attack: row.cells[7].textContent
+            });
+        }
+    });
+    
+    // Display search results count
+    displaySearchResults(results, allRows.length);
+    
+    // Show notification
+    const filterText = [];
+    if (sourceIP) filterText.push(`IP: ${sourceIP}`);
+    if (threatLevel) filterText.push(`Threat: ${threatLevel}`);
+    
+    if (filterText.length > 0) {
+        showNotification(`Found ${results.length} results for ${filterText.join(', ')}`);
+    }
 }
 
 function exportTrafficData() {
@@ -246,6 +295,36 @@ function showAttackDetails(attackType) {
     showNotification(details[attackType] || 'Attack details not available');
 }
 
+function showStatDetails(statType) {
+    const details = {
+        'total': {
+            title: 'Total Alerts Analysis',
+            content: '47 total alerts detected in the last 24 hours. This represents a 12% increase from yesterday, indicating heightened network activity and potential security concerns.',
+            breakdown: 'Breakdown: 8 High Risk, 15 Medium Risk, 24 Low Risk'
+        },
+        'high': {
+            title: 'High Risk Threats',
+            content: '8 high-risk threats detected. These include DDoS attacks, Botnet activity, and SSH brute force attempts. Immediate action required.',
+            breakdown: 'Threats: DDoS (3), Botnet (2), SSH Brute Force (2), DNS Amplification (1)'
+        },
+        'medium': {
+            title: 'Medium Risk Alerts',
+            content: '15 medium-risk alerts. These include port scans, brute force attempts, and suspicious traffic patterns.',
+            breakdown: 'Threats: Brute Force (5), Port Scan (4), HTTP Flood (3), FTP Attack (2), SMTP Attack (1)'
+        },
+        'low': {
+            title: 'Low Risk Monitoring',
+            content: '24 low-risk alerts. These are mostly suspicious connections and port scans that pose minimal immediate threat.',
+            breakdown: 'Threats: Port Scan (12), Database Scan (6), Suspicious Traffic (4), Connection Attempts (2)'
+        }
+    };
+    
+    const detail = details[statType];
+    if (detail) {
+        showDetailedNotification(detail.title, detail.content, detail.breakdown);
+    }
+}
+
 function simulateSearch(sourceIP, threatLevel) {
     // Return fake search results
     return [
@@ -260,16 +339,38 @@ function simulateSearch(sourceIP, threatLevel) {
     ];
 }
 
-function displaySearchResults(results) {
+function displaySearchResults(results, totalCount) {
     const resultsContainer = document.querySelector('#search-results');
     if (!resultsContainer) return;
     
-    resultsContainer.innerHTML = results.map(result => `
-        <div class="search-result">
-            <strong>${result.attack_type}</strong> from ${result.source_ip} 
-            (${result.threat_level} risk) - ${result.created_time}
+    if (results.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="search-result no-results">
+                <i class="fas fa-search"></i>
+                <strong>No results found</strong>
+                <p>Try adjusting your search criteria</p>
+            </div>
+        `;
+        return;
+    }
+    
+    resultsContainer.innerHTML = `
+        <div class="search-summary">
+            <strong>Found ${results.length} of ${totalCount} total entries</strong>
         </div>
-    `).join('');
+        ${results.map(result => `
+            <div class="search-result">
+                <div class="result-header">
+                    <span class="result-ip"><i class="fas fa-globe"></i> ${result.ip}</span>
+                    <span class="result-threat ${result.threat.toLowerCase().includes('high') ? 'high' : result.threat.toLowerCase().includes('medium') ? 'medium' : 'low'}">${result.threat}</span>
+                </div>
+                <div class="result-details">
+                    <span class="result-time"><i class="fas fa-clock"></i> ${result.time}</span>
+                    <span class="result-attack"><i class="fas fa-shield-alt"></i> ${result.attack}</span>
+                </div>
+            </div>
+        `).join('')}
+    `;
 }
 
 function generateFakeCSV() {
@@ -370,6 +471,54 @@ function showNotification(message) {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+function showDetailedNotification(title, content, breakdown) {
+    // Create detailed notification element
+    const notification = document.createElement('div');
+    notification.className = 'detailed-notification';
+    notification.innerHTML = `
+        <div class="notification-header">
+            <h4>${title}</h4>
+            <button class="close-btn">&times;</button>
+        </div>
+        <div class="notification-content">
+            <p>${content}</p>
+            <div class="notification-breakdown">
+                <strong>${breakdown}</strong>
+            </div>
+        </div>
+    `;
+    
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        color: #333;
+        padding: 0;
+        border-radius: 10px;
+        z-index: 1000;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        width: 400px;
+        max-width: 90vw;
+        border: 2px solid #007bff;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Add close button functionality
+    const closeBtn = notification.querySelector('.close-btn');
+    closeBtn.addEventListener('click', () => {
+        notification.remove();
+    });
+    
+    // Remove after 8 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 8000);
 }
 
 // Chart simulation functions
