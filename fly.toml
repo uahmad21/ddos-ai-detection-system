@@ -1,6 +1,5 @@
-# fly.toml app configuration file generated for ddos-ai-detection-system on 2025-08-14T20:30:00Z
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+# Fly.io configuration for DDoS AI Detection System
+# This file makes deployment super easy!
 
 app = "ddos-ai-detection-system"
 primary_region = "iad"
@@ -10,6 +9,7 @@ primary_region = "iad"
 [env]
   DJANGO_SETTINGS_MODULE = "dl_ids.settings_production"
   PORT = "8000"
+  PYTHON_VERSION = "3.9"
 
 [http_service]
   internal_port = 8000
@@ -30,3 +30,7 @@ primary_region = "iad"
   cpu_kind = "shared"
   cpus = 1
   memory_mb = 512
+
+# Auto-deploy settings
+[deploy]
+  strategy = "immediate"
