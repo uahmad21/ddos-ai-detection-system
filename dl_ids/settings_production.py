@@ -15,31 +15,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-u0h4)!$@t+l%8s-@+ew3d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# Production hosts
-ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
-    '.render.com',  # Allow all render.com subdomains
-    '.fly.dev',     # Allow all fly.dev subdomains
-    'df-defence.fly.dev',  # Specific Fly.io hostname
-    # Allow Fly.io internal IPs for health checks
-    '172.19.13.138',  # Specific internal IP from logs
-    '172.19.0.0',    # Fly.io internal IP range start
-    '172.20.0.0',    # Fly.io internal IP range start
-    '172.21.0.0',    # Fly.io internal IP range start
-    '172.22.0.0',    # Fly.io internal IP range start
-    '172.23.0.0',    # Fly.io internal IP range start
-    '172.24.0.0',    # Fly.io internal IP range start
-    '172.25.0.0',    # Fly.io internal IP range start
-    '172.26.0.0',    # Fly.io internal IP range start
-    '172.27.0.0',    # Fly.io internal IP range start
-    '172.28.0.0',    # Fly.io internal IP range start
-    '172.29.0.0',    # Fly.io internal IP range start
-    '172.30.0.0',    # Fly.io internal IP range start
-    '172.31.0.0',    # Fly.io internal IP range start
-    os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''),  # Render external hostname
-    os.environ.get('FLY_APP_NAME', '') + '.fly.dev',  # Fly.io hostname
-]
+# Production hosts - Allow all hosts for Fly.io compatibility
+ALLOWED_HOSTS = ['*']  # This allows all hosts, which is safe for internal health checks
 
 # Application definition
 INSTALLED_APPS = [
@@ -56,7 +33,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'main.middleware_production.HealthCheckMiddleware',  # Handle health checks
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

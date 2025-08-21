@@ -81,9 +81,7 @@ DEMO_ATTACK_DATA = {
 }
 
 def health_check(request):
-    """Simple health check for Fly.io - bypasses host validation"""
-    # This view is specifically for internal health checks
-    # It should always return OK regardless of host headers
+    """Simple health check for Fly.io"""
     return HttpResponse("OK", content_type="text/plain")
 
 def login(request):
