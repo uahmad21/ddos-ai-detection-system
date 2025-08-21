@@ -50,7 +50,8 @@ urlpatterns = [
     path('ip-rules/delete/<int:rule_id>/', views.delete_ip_rule, name='delete_ip_rule'),
 
     # 仪表盘数据接口
-    path('api/dashboard/stats', views.get_dashboard_stats, name='dashboard_stats'),
+path('api/dashboard/stats', views.get_dashboard_stats, name='dashboard_stats'),
+path('api/live-traffic', views.get_live_traffic, name='live_traffic'),
 
     # 流量日志相关接口
     path('traffic-log/', views.traffic_log_list, name='ids_traffic_log'),

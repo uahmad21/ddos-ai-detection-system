@@ -16,6 +16,8 @@
     <link href="{% static "myadmin/vendor/fontawesome-free/css/all.min.css"%}" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="{% static "myadmin/css/sb-admin-2.min.css"%}" rel="stylesheet">
+    <!-- Demo Interactive CSS -->
+    <link href="{% static "main/css/demo_interactive.css"%}" rel="stylesheet">
     <style>
         :root {
             --primary-color: #4e73df;    /* Primary blue color */
@@ -142,6 +144,9 @@
 <body id="page-top">
     <!-- Sidebar -->
     <nav class="sidebar">
+        <button class="sidebar-toggle" title="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
         <div class="system-title">
             <i class="fas fa-shield-alt"></i>
             <span>Network Traffic Detection</span>
@@ -263,6 +268,8 @@
     <!-- Page level custom scripts -->
     <script src="{% static "myadmin/js/demo/datatables-demo.js"%}"></script>
     <script src="{% static "dist/axios.min.js"%}"></script>
+    <!-- Demo Interactive JavaScript -->
+    <script src="{% static "main/js/demo_interactive.js"%}"></script>
 
 </body>
 {% block js %}{% endblock %}

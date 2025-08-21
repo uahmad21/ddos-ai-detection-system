@@ -288,29 +288,55 @@ def index(request, *args, **kwargs):
     return render(request, 'index.html', context)
 
 def screen(request):
-    """Screen view with demo traffic monitoring"""
+    """Screen view with demo traffic monitoring and interactive features"""
     if not request.session.get('is_login'):
         return redirect('/login')
+    
+    # Fake model performance data for demo
+    fake_model_data = {
+        'cnn': {'accuracy': 94.2, 'precision': 92.8, 'recall': 91.5, 'f1_score': 92.1},
+        'lstm': {'accuracy': 96.1, 'precision': 95.3, 'recall': 94.7, 'f1_score': 95.0},
+        'cnn_lstm_attention': {'accuracy': 97.8, 'precision': 97.2, 'recall': 96.9, 'f1_score': 97.0}
+    }
     
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
         'demo_mode': True,
-        'traffic_stats': DEMO_ATTACK_DATA['traffic_stats']
+        'traffic_stats': DEMO_ATTACK_DATA['traffic_stats'],
+        'model_data': fake_model_data,
+        'attack_types': ['Normal', 'DDoS', 'Port Scan', 'Botnet', 'Brute Force'],
+        'detection_rates': [98.5, 96.2, 94.8, 97.1, 93.5]
     }
     return render(request, 'screen.html', context)
 
 def dataset_result(request):
-    """Dataset result view with demo analysis"""
+    """Dataset result view with demo analysis and interactive features"""
     if not request.session.get('is_login'):
         return redirect('/login')
+    
+    # Fake dataset analysis data for demo
+    fake_dataset_data = {
+        'total_samples': 15000,
+        'normal_traffic': 12000,
+        'attack_samples': 3000,
+        'attack_distribution': {
+            'DDoS': 1200,
+            'Port Scan': 800,
+            'Botnet': 600,
+            'Brute Force': 400
+        },
+        'feature_importance': ['Packet Size', 'Flow Duration', 'Protocol', 'Port', 'Flags'],
+        'model_accuracy': 96.8
+    }
     
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
-        'message': 'Dataset analysis not available in demo mode',
+        'message': 'Dataset Analysis - AI Model Training Results',
         'demo_mode': True,
-        'demo_attacks': DEMO_ATTACK_DATA['recent_attacks']
+        'demo_attacks': DEMO_ATTACK_DATA['recent_attacks'],
+        'dataset_data': fake_dataset_data
     }
     return render(request, 'dataset_result.html', context)
 
@@ -423,17 +449,94 @@ def get_dashboard_stats(request):
         'data': DEMO_ATTACK_DATA['traffic_stats']
     })
 
+def get_live_traffic(request):
+    """Get live traffic updates for demo"""
+    if not request.session.get('is_login'):
+        return JsonResponse({'error': 'Not authenticated'}, status=401)
+    
+    # Simulate real-time traffic updates
+    import random
+    import time
+    
+    new_traffic = {
+        'id': random.randint(1000, 9999),
+        'created_time': time.strftime('%Y-%m-%d %H:%M:%S'),
+        'source_ip': f"{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}.{random.randint(1,255)}",
+        'dest_ip': f"10.0.0.{random.randint(1,100)}",
+        'source_port': random.randint(1024, 65535),
+        'dest_port': random.choice([80, 443, 22, 53, 21]),
+        'protocol': random.choice(['TCP', 'UDP']),
+        'attack_type': random.choice(['Normal', 'DDoS', 'Port Scan', 'Botnet', 'Brute Force']),
+        'threat_level': random.choice(['Low', 'Medium', 'High']),
+        'packet_count': random.randint(100, 20000),
+        'bytes_transferred': random.randint(1000, 5000000)
+    }
+    
+    return JsonResponse({
+        'status': 'success',
+        'new_traffic': new_traffic,
+        'demo_mode': True
+    })
+
 def traffic_log_list(request):
-    """Traffic log list view with demo logs"""
+    """Traffic log list view with demo data and interactive features"""
     if not request.session.get('is_login'):
         return redirect('/login')
+    
+    # Fake live traffic data for demo
+    fake_traffic_data = [
+        {
+            'id': 1,
+            'created_time': '2025-08-21 15:30:22',
+            'source_ip': '192.168.1.100',
+            'dest_ip': '10.0.0.50',
+            'source_port': 44321,
+            'dest_port': 80,
+            'protocol': 'TCP',
+            'attack_type': 'DDoS',
+            'threat_level': 'High',
+            'packet_count': 15000,
+            'bytes_transferred': 2048000
+        },
+        {
+            'id': 2,
+            'created_time': '2025-08-21 15:29:15',
+            'source_ip': '203.45.67.89',
+            'dest_ip': '10.0.0.51',
+            'source_port': 22,
+            'dest_port': 22,
+            'protocol': 'TCP',
+            'attack_type': 'Brute Force',
+            'threat_level': 'Medium',
+            'packet_count': 250,
+            'bytes_transferred': 12500
+        },
+        {
+            'id': 3,
+            'created_time': '2025-08-21 15:28:45',
+            'source_ip': '98.76.54.32',
+            'dest_ip': '10.0.0.52',
+            'source_port': 53,
+            'dest_port': 53,
+            'protocol': 'UDP',
+            'attack_type': 'Port Scan',
+            'threat_level': 'Low',
+            'packet_count': 500,
+            'bytes_transferred': 25000
+        }
+    ]
     
     context = {
         'user': request.session.get('login_user'),
         'features': FEATURES,
-        'message': 'Traffic logs not available in demo mode',
+        'message': 'Live Traffic Monitoring - AI Detection Results',
         'demo_mode': True,
-        'demo_logs': DEMO_ATTACK_DATA['recent_attacks']
+        'demo_logs': fake_traffic_data,
+        'traffic_logs': fake_traffic_data,
+        'total_logs': len(fake_traffic_data),
+        'high_risk_count': 1,
+        'medium_risk_count': 1,
+        'low_risk_count': 1
     }
     return render(request, 'traffic_log.html', context)
 

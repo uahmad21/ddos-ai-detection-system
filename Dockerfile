@@ -1,4 +1,4 @@
-# Use Python 3.10 slim image for Django 4.2 compatibility
+# Use Python 3.10 slim image for Django 5.1.4 compatibility
 FROM python:3.10-slim
 
 # Set environment variables
@@ -21,14 +21,14 @@ RUN pip install --no-cache-dir -r requirements_minimal.txt
 # Copy project
 COPY . .
 
-# Make startup script executable
-RUN chmod +x start.sh
+# Collect static files
+RUN python manage.py collectstatic --noinput --settings=dl_ids.settings_production
 
-# Create staticfiles directory
-RUN mkdir -p staticfiles
+# Run database migrations
+RUN python manage.py migrate --settings=dl_ids.settings_production
 
 # Expose port
 EXPOSE 8000
 
 # Start command
-CMD ["./start.sh"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "dl_ids.wsgi:application"]
