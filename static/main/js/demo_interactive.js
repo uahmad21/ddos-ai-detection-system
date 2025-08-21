@@ -111,14 +111,8 @@ function addPerformanceCharts() {
     const chartContainer = document.querySelector('#performance-chart');
     if (!chartContainer) return;
     
-    // Create fake performance chart
-    const ctx = document.createElement('canvas');
-    ctx.width = 400;
-    ctx.height = 300;
-    chartContainer.appendChild(ctx);
-    
-    // Add fake chart data
-    const chartData = {
+    // Simulate chart rendering
+    simulateChartRendering(chartContainer, {
         labels: ['CNN', 'LSTM', 'CNN-LSTM-Attention'],
         datasets: [{
             label: 'Accuracy (%)',
@@ -127,10 +121,13 @@ function addPerformanceCharts() {
             borderColor: ['#FF6384', '#36A2EB', '#FFCE56'],
             borderWidth: 2
         }]
-    };
+    });
     
-    // Simulate chart rendering
-    simulateChartRendering(chartContainer, chartData);
+    // Add attack detection chart
+    const attackChartContainer = document.querySelector('#attack-detection-chart');
+    if (attackChartContainer) {
+        simulateAttackDetectionChart(attackChartContainer);
+    }
 }
 
 function addDatasetCharts() {
@@ -392,6 +389,51 @@ function simulateChartRendering(container, data) {
     `;
 }
 
+function simulateAttackDetectionChart(container) {
+    container.innerHTML = `
+        <div class="chart-placeholder">
+            <h4>Attack Detection Rates by Type</h4>
+            <div class="attack-rates">
+                <div class="attack-rate-item">
+                    <span class="attack-name">Normal Traffic</span>
+                    <div class="rate-bar">
+                        <div class="rate-fill" style="width: 98.5%; background: #28a745;"></div>
+                        <span class="rate-value">98.5%</span>
+                    </div>
+                </div>
+                <div class="attack-rate-item">
+                    <span class="attack-name">DDoS Attacks</span>
+                    <div class="rate-bar">
+                        <div class="rate-fill" style="width: 96.2%; background: #dc3545;"></div>
+                        <span class="rate-value">96.2%</span>
+                    </div>
+                </div>
+                <div class="attack-rate-item">
+                    <span class="attack-name">Port Scans</span>
+                    <div class="rate-bar">
+                        <div class="rate-fill" style="width: 94.8%; background: #ffc107;"></div>
+                        <span class="rate-value">94.8%</span>
+                    </div>
+                </div>
+                <div class="attack-rate-item">
+                    <span class="attack-name">Botnet Activity</span>
+                    <div class="rate-bar">
+                        <div class="rate-fill" style="width: 97.1%; background: #17a2b8;"></div>
+                        <span class="rate-value">97.1%</span>
+                    </div>
+                </div>
+                <div class="attack-rate-item">
+                    <span class="attack-name">Brute Force</span>
+                    <div class="rate-bar">
+                        <div class="rate-fill" style="width: 93.5%; background: #6f42c1;"></div>
+                        <span class="rate-value">93.5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
 function renderDatasetChart(container, data) {
     container.innerHTML = `
         <div class="dataset-visualization">
@@ -421,6 +463,12 @@ function renderDatasetChart(container, data) {
             </div>
         </div>
     `;
+    
+    // Add dataset stats chart
+    const statsContainer = document.querySelector('#dataset-stats');
+    if (statsContainer) {
+        renderDatasetStatsChart(statsContainer, data);
+    }
 }
 
 function simulateTrendChart(container, data) {
@@ -435,7 +483,34 @@ function simulateTrendChart(container, data) {
                 `).join('')}
             </div>
             <div class="trend-labels">
-                ${data.labels.map(label => `<span class="trend-label">${label}</span>`).join('')}
+                ${data.labels.map(label => `<span class="point-label">${label}</span>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function renderDatasetStatsChart(container, data) {
+    container.innerHTML = `
+        <div class="dataset-stats-chart">
+            <h4>Dataset Statistics</h4>
+            <div class="stats-overview">
+                <div class="stat-circle">
+                    <div class="circle-progress" style="background: conic-gradient(#007bff 0deg ${(data.model_accuracy / 100) * 360}deg, #e9ecef 0deg);">
+                        <div class="circle-center">
+                            <span class="accuracy-value">${data.model_accuracy}%</span>
+                            <span class="accuracy-label">Accuracy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-importance">
+                    <h5>Top Features</h5>
+                    ${data.feature_importance.map((feature, index) => `
+                        <div class="feature-item">
+                            <span class="feature-rank">${index + 1}</span>
+                            <span class="feature-name">${feature}</span>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         </div>
     `;

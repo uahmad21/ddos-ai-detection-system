@@ -22,17 +22,17 @@
         <div class="card-body">
             <form id="search-form" class="form-inline">
                 <div class="form-group mx-sm-3 mb-2">
-                    <label for="src_ip" class="mr-2">Source IP Address:</label>
-                    <input type="text" class="form-control" id="src_ip" name="src_ip" placeholder="Enter source IP address">
+                    <label for="source-ip" class="mr-2">Source IP Address:</label>
+                    <input type="text" class="form-control" id="source-ip" name="source-ip" placeholder="Enter source IP address">
                 </div>
                 <div class="form-group mx-sm-3 mb-2">
-                    <label for="threat" class="mr-2">Threat Level:</label>
-                    <select class="form-control" id="threat" name="threat">
+                    <label for="threat-level" class="mr-2">Threat Level:</label>
+                    <select class="form-control" id="threat-level" name="threat-level">
                         <option value="">All</option>
-                        <option value="High Risk">High Risk</option>
-                        <option value="Medium Risk">Medium Risk</option>
-                        <option value="Low Risk">Low Risk</option>
-                        <option value="No Attack Detected">Normal</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                        <option value="Normal">Normal</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary mb-2">Search</button>
@@ -66,46 +66,41 @@
                     <tbody>
                         {% for log in traffic_logs %}
                         <tr>
-                            <td><input type="checkbox" class="log-checkbox" value="{{ log.id }}"></td>
-                            <td>{{ log.create_time }}</td>
-                            <td>{{ log.src_ip }}</td>
-                            <td>{{ log.dst_ip }}</td>
-                            <td>{{ log.src_port }}</td>
-                            <td>{{ log.dst_port }}</td>
+                            <td><input type="checkbox" name="log-select" value="{{ log.id }}"></td>
+                            <td>{{ log.created_time }}</td>
+                            <td>{{ log.source_ip }}</td>
+                            <td>{{ log.dest_ip }}</td>
+                            <td>{{ log.source_port }}</td>
+                            <td>{{ log.dest_port }}</td>
                             <td>{{ log.protocol }}</td>
                             <td>
                                 {% if log.attack_type %}
-                                {% if log.threat == 'High Risk' %}
-                                <span class="badge badge-danger">{{ log.attack_type }}</span>
-                                {% elif log.threat == 'Medium Risk' %}
-                                <span class="badge badge-warning">{{ log.attack_type }}</span>
-                                {% elif log.threat == 'Low Risk' %}
-                                <span class="badge badge-info">{{ log.attack_type }}</span>
+                                {% if log.threat_level == 'High' %}
+                                <span class="badge badge-high">{{ log.attack_type }}</span>
+                                {% elif log.threat_level == 'Medium' %}
+                                <span class="badge badge-medium">{{ log.attack_type }}</span>
+                                {% elif log.threat_level == 'Low' %}
+                                <span class="badge badge-low">{{ log.attack_type }}</span>
                                 {% else %}
-                                <span class="badge badge-success">{{ log.attack_type }}</span>
+                                <span class="badge badge-success">Normal</span>
                                 {% endif %}
                                 {% else %}
                                 <span class="badge badge-success">Normal</span>
                                 {% endif %}
                             </td>
                             <td>
-                                {% if log.threat == 'High Risk' %}
-                                <span class="badge badge-danger">High Risk</span>
-                                {% elif log.threat == 'Medium Risk' %}
-                                <span class="badge badge-warning">Medium Risk</span>
-                                {% elif log.threat == 'Low Risk' %}
-                                <span class="badge badge-info">Low Risk</span>
+                                {% if log.threat_level == 'High' %}
+                                <span class="badge badge-high">High</span>
+                                {% elif log.threat_level == 'Medium' %}
+                                <span class="badge badge-medium">Medium</span>
+                                {% elif log.threat_level == 'Low' %}
+                                <span class="badge badge-low">Low</span>
                                 {% else %}
                                 <span class="badge badge-success">Normal</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <button class="btn btn-info btn-sm" onclick="viewDetails({{ log.id }})">
-                                    <i class="fas fa-info-circle"></i> Details
-                                </button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteLog({{ log.id }})">
-                                    <i class="fas fa-trash"></i> Delete
-                                </button>
+                                <button class="btn btn-info btn-sm">View</button>
                             </td>
                         </tr>
                         {% endfor %}
