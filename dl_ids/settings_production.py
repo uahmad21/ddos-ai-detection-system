@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
-    'captcha',
+    # 'captcha',  # Removed for production deployment
 ]
 
 MIDDLEWARE = [
