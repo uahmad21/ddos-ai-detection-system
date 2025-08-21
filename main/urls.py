@@ -58,4 +58,7 @@ urlpatterns = [
     path('api/traffic-log-delete/<int:log_id>/', views.traffic_log_detete, name='traffic_log_detete'),
     path('api/traffic-log/batch-delete/', views.traffic_log_batch_delete, name='traffic_log_batch_delete'),
     path('api/traffic-log/export/', views.traffic_log_export, name='traffic_log_export'),
+    
+    # Health check for Fly.io
+    path('health', views.health_check, name='health_check'),
 ]

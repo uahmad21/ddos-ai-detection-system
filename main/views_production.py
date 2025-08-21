@@ -80,6 +80,10 @@ DEMO_ATTACK_DATA = {
     }
 }
 
+def health_check(request):
+    """Simple health check for Fly.io"""
+    return HttpResponse("OK", content_type="text/plain")
+
 def login(request):
     """Basic login view with demo mode"""
     captcha_form = None

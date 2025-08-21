@@ -21,6 +21,20 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '.render.com',  # Allow all render.com subdomains
     '.fly.dev',     # Allow all fly.dev subdomains
+    'df-defence.fly.dev',  # Specific Fly.io hostname
+    '172.19.0.0/16',  # Allow Fly.io internal IP range
+    '172.20.0.0/16',  # Allow Fly.io internal IP range
+    '172.21.0.0/16',  # Allow Fly.io internal IP range
+    '172.22.0.0/16',  # Allow Fly.io internal IP range
+    '172.23.0.0/16',  # Allow Fly.io internal IP range
+    '172.24.0.0/16',  # Allow Fly.io internal IP range
+    '172.25.0.0/16',  # Allow Fly.io internal IP range
+    '172.26.0.0/16',  # Allow Fly.io internal IP range
+    '172.27.0.0/16',  # Allow Fly.io internal IP range
+    '172.28.0.0/16',  # Allow Fly.io internal IP range
+    '172.29.0.0/16',  # Allow Fly.io internal IP range
+    '172.30.0.0/16',  # Allow Fly.io internal IP range
+    '172.31.0.0/16',  # Allow Fly.io internal IP range
     os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''),  # Render external hostname
     os.environ.get('FLY_APP_NAME', '') + '.fly.dev',  # Fly.io hostname
 ]
