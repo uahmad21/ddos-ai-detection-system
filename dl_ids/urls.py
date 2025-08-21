@@ -4,6 +4,6 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls')),
-    path('captcha', include('captcha.urls')),   # 验证码
+    # path('captcha', include('captcha.urls')),   # 验证码 - Removed for production
 ]
 

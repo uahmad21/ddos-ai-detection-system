@@ -20,7 +20,9 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '.render.com',  # Allow all render.com subdomains
+    '.fly.dev',     # Allow all fly.dev subdomains
     os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''),  # Render external hostname
+    os.environ.get('FLY_APP_NAME', '') + '.fly.dev',  # Fly.io hostname
 ]
 
 # Application definition
