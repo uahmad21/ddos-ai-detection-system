@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-u0h4)!$@t+l%8s-@+ew3dwrcybvrrqvk+nr1y)3&kofkj2l^!q')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True  # Temporarily enable debug for troubleshooting
 
 # Production hosts - Allow all hosts for Fly.io compatibility
 ALLOWED_HOSTS = ['*']  # This allows all hosts, which is safe for internal health checks
@@ -132,12 +132,17 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'INFO',
+        'level': 'DEBUG',
     },
     'loggers': {
         'django': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
             'propagate': False,
         },
     },
